@@ -1,0 +1,6 @@
+HOST="192.168.1.109"
+USER="pengWaifu"
+PASS="92n3nms9c02h"
+DTB="waifu"
+
+token = "MTA3MTQ2MjA2ODczNTE5MzEzOA.GsBvoX.5IXKia8jMWAhyUU274Xh0BuHeB6zjVYF3pjpoE"
