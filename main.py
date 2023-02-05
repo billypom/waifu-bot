@@ -28,9 +28,12 @@ async def on_raw_reaction_add(payload):
         unix_time_now = await get_unix_time_now()
         # compare against claim time limit
         with DBA.DBAccess() as db:
-            temp = db.query('SELECT claim_time_limit FROM waifu WHERE id = %s;', (waifu,))
+            temp = db.query('SELECT claim_time_limit, user_id FROM waifu WHERE id = %s;', (waifu,))
             limit = temp[0][0]
+            belongs_to = temp[0][1]
         if unix_time_now > limit:
+            return
+        if belongs_to:
             return
         # insert new user into db if they dont exist yet
         x = await check_if_uid_exists(payload.user_id)
@@ -79,6 +82,7 @@ async def roll(ctx):
     guild_ids=GUILDS
 )
 async def collection(ctx):
+    await ctx.defer(ephemeral=True)
     data = []
     with DBA.DBAccess() as db:
         temp = db.query('SELECT name FROM waifu WHERE user_id = %s;', (ctx.author.id,))
@@ -102,7 +106,7 @@ async def collection(ctx):
 
     def check(reaction, user):
         return user == ctx.author and str(reaction.emoji) in ["⏮️", "⬅️", "➡️", "⏭️"]
-
+    await ctx.respond('collection requested...')
     while True:
         try:
             reaction, user = await client.wait_for("reaction_add", check=check, timeout=60.0)
@@ -133,6 +137,22 @@ async def collection(ctx):
             url = bing_image_urls(search_string, limit=1)[0]
             embed.set_thumbnail(url=url)
             await msg.edit(embed=embed)
+
+@client.slash_command(
+    name='divorce',
+    description='divorce someone',
+    guild_ids=GUILDS
+)
+async def divorse(
+    ctx,
+    name: discord.Option(str, 'name of character to divorce', required=True)):
+    await ctx.defer()
+    with DBA.DBAccess() as db:
+        temp = db.query('SELECT id, name FROM waifu WHERE user_id = %s AND name LIKE %s;', (ctx.author.id, f'%{}%'))
+        waifu = temp[0][0]
+        name = temp[0][1]
+        db.execute('UPDATE waifu SET user_id = NULL WHERE id = %s;', (waifu,))
+    await ctx.respond(f'<@{ctx.author.id}> has divorced {name}')
 
 #  helpers
 async def get_unix_time_now():
