@@ -143,16 +143,16 @@ async def collection(ctx):
     description='divorce someone',
     guild_ids=GUILDS
 )
-async def divorse(
+async def divorce(
     ctx,
     name: discord.Option(str, 'name of character to divorce', required=True)):
     await ctx.defer()
     with DBA.DBAccess() as db:
-        temp = db.query('SELECT id, name FROM waifu WHERE user_id = %s AND name LIKE %s;', (ctx.author.id, f'%{}%'))
+        temp = db.query('SELECT id, name FROM waifu WHERE user_id = %s AND name LIKE %s;', (ctx.author.id, f'%{name}%'))
         waifu = temp[0][0]
-        name = temp[0][1]
+        waifu_name = temp[0][1]
         db.execute('UPDATE waifu SET user_id = NULL WHERE id = %s;', (waifu,))
-    await ctx.respond(f'<@{ctx.author.id}> has divorced {name}')
+    await ctx.respond(f'<@{ctx.author.id}> has divorced {waifu_name}')
 
 #  helpers
 async def get_unix_time_now():
