@@ -9,7 +9,7 @@ from bing_image_urls import bing_image_urls
 from discord.ui import Button, View
 from discord.ext import commands, tasks
 
-GUILDS=[242403504839327744]
+GUILDS=[242403504839327744, 1052203385790677053]
 
 intents = discord.Intents(message_content=True, messages=True, guilds=True, reactions=True, members=True)
 client = discord.Bot(intents=intents, activity=discord.Game(str('marrying')))
