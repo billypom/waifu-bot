@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 GUILDS=[242403504839327744, 1052203385790677053]
 
 intents = discord.Intents(message_content=True, messages=True, guilds=True, reactions=True, members=True)
-client = discord.Bot(intents=intents, activity=discord.Game(str('`/roll` a waifu or `/confess` your sins >:3')))
+client = discord.Bot(intents=intents, activity=discord.Game(str('/roll a waifu or /confess your sins >:3')))
 
 @client.event
 async def on_raw_reaction_add(payload):
