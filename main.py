@@ -163,9 +163,12 @@ async def confess(
     ctx,
     message: discord.Option(str, 'say it', required=True)):
     await ctx.defer(ephemeral=True)
-    channel = client.get_channel(secretly.confession_channel)
-    await channel.send(message)
-    await ctx.respond('Your confession was submitted! :x')
+    try:
+        channel = client.get_channel(secretly.confession_channel)
+        await channel.send(message)
+        await ctx.respond('Your confession was submitted! :x')
+    except Exception as e:
+        await ctx.respond(f'Oops! Error... Sorry: `{e}`')
     return
 
 
