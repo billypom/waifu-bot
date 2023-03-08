@@ -154,6 +154,21 @@ async def divorce(
         db.execute('UPDATE waifu SET user_id = NULL WHERE id = %s;', (waifu,))
     await ctx.respond(f'<@{ctx.author.id}> has divorced {waifu_name}')
 
+@client.slash_command(
+    name='confess',
+    description=':x',
+    guild_ids=GUILDS
+)
+async def confess(
+    ctx,
+    message: discord.Option(str, 'say it', required=True)):
+    await ctx.defer()
+    channel = client.get_channel(secretly.confession_channel)
+    await channel.send(message)
+    return
+
+
+
 #  helpers
 async def get_unix_time_now():
     return time.mktime(datetime.datetime.now().timetuple())
