@@ -162,9 +162,10 @@ async def divorce(
 async def confess(
     ctx,
     message: discord.Option(str, 'say it', required=True)):
-    await ctx.defer()
+    await ctx.defer(ephemeral=True)
     channel = client.get_channel(secretly.confession_channel)
     await channel.send(message)
+    await ctx.respond('Your confession was submitted! :x')
     return
 
 
