@@ -165,7 +165,8 @@ async def confess(
     await ctx.defer(ephemeral=True)
     try:
         channel = client.get_channel(secretly.confession_channel)
-        await channel.send(message)
+        embed = discord.Embed(title='Confession', description=message, color = discord.Color.random())
+        await channel.send(content=None, embed=embed)
         await ctx.respond('Your confession was submitted! :x')
     except Exception as e:
         await ctx.respond(f'Oops! Error... Sorry: `{e}`')
